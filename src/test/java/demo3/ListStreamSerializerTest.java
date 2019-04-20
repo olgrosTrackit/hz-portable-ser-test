@@ -13,7 +13,7 @@
  * from Trackitecture LLC.
  */
 
-package demo2;
+package demo3;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -25,6 +25,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.SerializationConfig;
+import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -34,7 +35,7 @@ import com.hazelcast.core.IMap;
  *
  */
 @TestInstance (Lifecycle.PER_CLASS)
-public class ListNoGenericsTest {
+public class ListStreamSerializerTest {
 
 	protected HazelcastInstance instance;
 	
@@ -43,9 +44,21 @@ public class ListNoGenericsTest {
 
 		Config cfg = new Config();
 		cfg.setInstanceName("Test");
-		SerializationConfig serConf = new SerializationConfig();
-		serConf.addPortableFactory(1, new PortFact()).setPortableVersion(0);
-		cfg.setSerializationConfig(serConf);		
+		SerializerConfig sc = new SerializerConfig()
+			    .setImplementation(new MyCollectionSerializer())
+			    .setTypeClass(MyCollection.class);
+		cfg.getSerializationConfig().addSerializerConfig(sc);		
+
+		sc = new SerializerConfig()
+			    .setImplementation(new MyObjectIntegerSerializer())
+			    .setTypeClass(MyObjectInteger.class);
+		cfg.getSerializationConfig().addSerializerConfig(sc);
+		
+		sc = new SerializerConfig()
+			    .setImplementation(new MyObjectStringSerializer())
+			    .setTypeClass(MyObjectString.class);
+		cfg.getSerializationConfig().addSerializerConfig(sc);		
+		
 		instance = Hazelcast.newHazelcastInstance(cfg);
 
 	}
