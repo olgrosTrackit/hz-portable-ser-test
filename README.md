@@ -9,4 +9,4 @@ The main issue is that the serialization of the list (or any other colletction) 
 
 Therefore it seems to be impossible to serialize collections whose members conform to the same interface but have different implementaions.
 
-[4/20/19] added a third demo version based on the StreamSerializer<T> implementation. This implementation works as expected, but does have the nice feature of querying and indexing without deserialization of the object.
+<b>[4/20/19]</b> added a third demo version based on the StreamSerializer<T> implementation. This implementation works as expected, but does not have the nice feature of querying and indexing without deserialization of the object.
